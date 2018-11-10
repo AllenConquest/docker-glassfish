@@ -1,4 +1,4 @@
-FROM openjdk:7u151-jdk-alpine
+FROM anapsix/alpine-java:7
 
 # Set environment variables
 ENV GLASSFISH_PKG=/tmp/glassfish-3.1.2.2.zip \
@@ -8,7 +8,10 @@ ENV GLASSFISH_PKG=/tmp/glassfish-3.1.2.2.zip \
     PATH=$PATH:/usr/local/glassfish3/bin
 
 # Download and install GlassFish
-RUN wget -q -O $GLASSFISH_PKG $GLASSFISH_URL && \
+RUN apk update && \
+  	apk add ca-certificates wget && \
+  	update-ca-certificates && \  
+  	wget -q -O $GLASSFISH_PKG $GLASSFISH_URL && \
     echo "$MD5 *$GLASSFISH_PKG" | md5sum -c - && \
     unzip -o $GLASSFISH_PKG -d /usr/local && \
     rm -f $GLASSFISH_PKG && \
